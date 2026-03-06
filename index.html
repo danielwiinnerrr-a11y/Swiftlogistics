@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftLogistics - Track Shipments</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+        body{background:#f0f2f5}
+        .header{background:#1e3a8a;color:white;padding:1rem;text-align:center}
+        .container{max-width:800px;margin:2rem auto;padding:0 1rem}
+        .track-box{background:white;padding:2rem;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);text-align:center}
+        h1{margin-bottom:1rem;color:#1e3a8a}
+        input{width:100%;padding:1rem;font-size:1rem;border:2px solid #ddd;border-radius:5px;margin-bottom:1rem}
+        button{background:#f59e0b;color:white;border:none;padding:1rem 2rem;font-size:1rem;border-radius:5px;cursor:pointer;width:100%}
+        button:hover{background:#d97706}
+        .result{margin-top:2rem;padding:1.5rem;background:#f8fafc;border-radius:8px;display:none;text-align:left}
+        .status{display:inline-block;padding:0.5rem 1rem;border-radius:20px;font-weight:bold;margin-bottom:1rem}
+        .pending{background:#fef3c7;color:#92400e}
+        .transit{background:#dbeafe;color:#1e40af}
+        .delivered{background:#d1fae5;color:#065f46}
+        .timeline{margin-top:1rem;padding-left:1rem;border-left:3px solid #e5e7eb}
+        .step{margin-bottom:1rem;padding-left:1rem}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚡ SwiftLogistics</h1>
+        <p>Global Shipment Tracking</p>
+    </div>
+    
+    <div class="container">
+        <div class="track-box">
+            <h2>Track Your Shipment</h2>
+            <input type="text" id="trackingNum" placeholder="Enter tracking number (e.g., SWFT123456)">
+            <button onclick="track()">Track Shipment</button>
+            
+            <div class="result" id="result">
+                <h3>Tracking: <span id="trackNum"></span></h3>
+                <div class="status" id="status"></div>
+                <p><strong>From:</strong> <span id="from"></span></p>
+                <p><strong>To:</strong> <span id="to"></span></p>
+                <p><strong>Estimated Delivery:</strong> <span id="delivery"></span></p>
+                <div class="timeline" id="timeline"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const shipments = {
+            'SWFT123456':{status:'delivered',from:'New York',to:'London',date:'Mar 5, 2024',history:['Delivered','Out for delivery','In transit','Picked up']},
+            'SWFT999888':{status:'transit',from:'Shanghai',to:'Los Angeles',date:'Mar 10, 2024',history:['In transit','Departed facility','Picked up']},
+            'SWFT111222':{status:'pending',from:'Berlin',to:'Paris',date:'Mar 8, 2024',history:['Order received']}
+        };
+        
+        function track(){
+            const num = document.getElementById('trackingNum').value.trim().toUpperCase();
+            const result = document.getElementById('result');
+            
+            if(!num){alert('Enter tracking number');return;}
+            
+            const data = shipments[num] || {
+                status: 'transit',
+                from: 'Miami',
+                to: 'Toronto',
+                date: 'Mar 12, 2024',
+                history: ['In transit','Picked up']
+            };
+            
+            document.getElementById('trackNum').textContent = num;
+            document.getElementById('status').textContent = data.status;
+            document.getElementById('status').className = 'status ' + data.status;
+            document.getElementById('from').textContent = data.from;
+            document.getElementById('to').textContent = data.to;
+            document.getElementById('delivery').textContent = data.date;
+            document.getElementById('timeline').innerHTML = data.history.map(h => '<div class="step">✓ ' + h + '</div>').join('');
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
